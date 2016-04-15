@@ -4,23 +4,27 @@
 	<meta charset="UTF-8">
 	<title>CanvasColock</title>
 </head>
-<body>
-	<canvas id="canvas" style="display: block;margin: 0 auto;"></canvas>
+<body style="height:100%">
+	<canvas id="canvas" style="height:100%"></canvas>
 </body>
-<script type="text/javascript" src="http://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
 <script type="text/javascript" src="digit.js"></script>
 <script type="text/javascript">
 //因为js代码量很少就直接写在html页面了
-var WINDOW_WIDTH=1024;
-var WINDOW_HEIGHT=650;
-var RADIUS=8;
+var WINDOW_WIDTH;
+var WINDOW_HEIGHT;
+var RADIUS;
 var context=canvas.getContext("2d");
-var MARGIN_TOP=60;
-var MARGIN_LEFT=30;
+var MARGIN_TOP;
+var MARGIN_LEFT;
 var showtime=new Date();
 var balls=[];
 const colors=["#51F511","#66FAD5","#EF1C3E","#FFFA5F","#DE48CD","#310CF2"];
 	window.onload=function(){
+		WINDOW_WIDTH=document.documentElement.clientWidth;
+		WINDOW_HEIGHT=document.documentElement.clientHeight;
+		MARGIN_LEFT=Math.round(WINDOW_WIDTH/10);
+		MARGIN_TOP=Math.round(WINDOW_HEIGHT/5);
+		RADIUS=Math.round(WINDOW_WIDTH*4/5/108)-1;
 		var canvas=document.getElementById("canvas");
 		showtime=new Date();
 		canvas.width=WINDOW_WIDTH;
@@ -102,6 +106,14 @@ const colors=["#51F511","#66FAD5","#EF1C3E","#FFFA5F","#DE48CD","#310CF2"];
 				balls[i].y=WINDOW_HEIGHT -RADIUS;
 				balls[i].vy=-balls[i].vy*0.6;
 			}
+		}
+		var ballscontol=0;
+		for(i=0;i<balls.length;i++)
+			if (balls[i].x + RADIUS>0&&balls[i].x - RADIUS<WINDOW_WIDTH) {
+				balls[ballscontol++]=balls[i]
+			}
+		while(balls.length>Math.min(ballscontol,300)){
+			balls.pop();
 		}
 	}
 	function addballs(x,y,num){
